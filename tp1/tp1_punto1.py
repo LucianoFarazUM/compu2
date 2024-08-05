@@ -1,51 +1,46 @@
 from PIL import Image
-import numpy as np
 
-def load_image(image_path):
+def cargar_y_dividir_imagen(ruta_imagen, n_partes):
     """
-    Carga una imagen desde el disco utilizando PIL (Pillow).
-    
-    Args:
-    - image_path: La ruta de la imagen en el disco.
-    
-    Returns:
-    - La imagen cargada.
+    Cargar una imagen y dividirla en partes horizontales iguales.
+
+    :param ruta_imagen: La ruta de la imagen a cargar.
+    :param n_partes: El número de partes en que se dividirá la imagen.
+    :return: Una lista de partes de la imagen.
     """
-    return Image.open(image_path)
+    imagen = Image.open(ruta_imagen)
+    ancho, alto = imagen.size
+    altura_parte = alto // n_partes
+    partes = []
 
-def split_image(image, num_parts):
+    for i in range(n_partes):
+        top = i * altura_parte
+        bottom = (i + 1) * altura_parte if i < n_partes - 1 else alto
+        parte = imagen.crop((0, top, ancho, bottom))
+        partes.append(parte)
+
+    return partes
+
+def guardar_partes(partes, ruta_salida_base):
     """
-    Divide una imagen en partes iguales.
-    
-    Args:
-    - image: La imagen a dividir.
-    - num_parts: El número de partes en las que se dividirá la imagen.
-    
-    Returns:
-    - Una lista de imágenes, cada una representando una parte de la imagen original.
+    Guardar las partes de una imagen en archivos.
+
+    :param partes: Una lista de partes de la imagen.
+    :param ruta_salida_base: Ruta base para guardar las partes de la imagen.
     """
-    width, height = image.size
-    part_height = height // num_parts
-    parts = []
-    for i in range(num_parts):
-        top = i * part_height
-        bottom = (i + 1) * part_height
-        part = image.crop((0, top, width, bottom))
-        parts.append(part)
-    return parts
+    for i, parte in enumerate(partes):
+        ruta_salida = f'{ruta_salida_base}_parte_{i + 1}.png'
+        parte.save(ruta_salida)
+        print(f'Parte {i + 1} guardada en: {ruta_salida}')
 
-# Ejemplo de uso
-image_path = "/home/luciano/Descargas/um_logo.png"  # Ruta de la imagen en el disco
-num_parts = 2 # Número de partes en las que se dividirá la imagen
-
-# Cargar la imagen
-image = load_image(image_path)
-
-# Dividir la imagen en partes
-image_parts = split_image(image, num_parts)
-
-# Mostrar cada parte de la imagen
-for i, part in enumerate(image_parts):
-    part.show()
-
-# Ahora puedes procesar cada parte de la imagen en paralelo
+if __name__ == "__main__":
+    try:
+        ruta_imagen = "/home/luciano/Descargas/um_logo.png"
+        
+        n_partes = int(input('Ingrese el número de partes que quiera: '))
+        partes = cargar_y_dividir_imagen(ruta_imagen, n_partes)
+        
+        ruta_salida_base = 'parte_imagen'
+        guardar_partes(partes, ruta_salida_base)
+    except Exception as e:
+        print(f"Ocurrió un error: {e}")

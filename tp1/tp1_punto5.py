@@ -9,7 +9,7 @@ def load_image(image_path):
     """
     Carga una imagen desde el disco utilizando PIL (Pillow).
     """
-    return Image.open(image_path).convert('RGB')  # Asegúrate de que la imagen esté en formato RGB
+    return Image.open(image_path).convert('RGB')  
 
 def split_image(image, num_parts):
     """
@@ -49,7 +49,7 @@ def process_image_parts_with_shared_memory(image_parts, num_parts, sigma=2.0):
     """
     width, height = image_parts[0].size
     # Crear un array compartido para almacenar los resultados
-    shared_array = Array(ctypes.c_uint8, width * height * 3)
+    shared_array = Array(ctypes.c_uint8, width * height * 3)  # Ajustar el tamaño del array compartido
     
     # Convertir las partes de la imagen a un array numpy y copiar al array compartido
     np_array_shared = np.frombuffer(shared_array.get_obj(), dtype=np.uint8).reshape((height, width, 3))
@@ -72,7 +72,8 @@ def process_image_parts_with_shared_memory(image_parts, num_parts, sigma=2.0):
         p.join()
     
     # Crear una imagen final combinando los resultados procesados
-    combined_image = Image.fromarray(np_array_shared)
+    np_array_final = np.frombuffer(shared_array.get_obj(), dtype=np.uint8).reshape((height, width, 3))
+    combined_image = Image.fromarray(np_array_final)
     return combined_image
 
 def main(image_path, num_parts, sigma=2.0):
@@ -85,7 +86,7 @@ def main(image_path, num_parts, sigma=2.0):
     combined_image.show()
     combined_image.save('imagen_combinada_con_memoria_compartida.jpg')
 
-# Ejemplo de uso
+
 if __name__ == "__main__":
     image_path = "/home/luciano/Descargas/um_logo.png"  # Ruta de la imagen en el disco
     num_parts = 2  # Número de partes en las que se dividirá la imagen

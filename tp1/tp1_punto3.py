@@ -1,8 +1,12 @@
-from PIL import Image
+import sys
+import os
 import numpy as np
-from scipy.ndimage import gaussian_filter
 import multiprocessing
-from functools import partial
+from PIL import Image
+from scipy.ndimage import gaussian_filter
+
+# Agregar el directorio raíz al path (esto puede ser opcional dependiendo de tu estructura de directorios)
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 def load_image(image_path):
     """
@@ -81,20 +85,26 @@ def combine_image_parts(filtered_parts):
     
     return combined_image
 
-def main(image_path, num_parts, sigma=2.0):
+def procesar_imagen_con_comunicacion(ruta_imagen, ruta_salida='imagen_filtrada.jpg', num_procesos=4, sigma=2.0):
     """
-    Función principal para cargar, dividir, procesar y mostrar la imagen.
+    :param ruta_imagen: Ruta de la imagen a procesar.
+    :param ruta_salida: Ruta donde se guardará la imagen filtrada.
+    :param num_procesos: Número de procesos a usar para el filtrado.
+    :param sigma: Desviación estándar para el filtro gaussiano.
     """
-    image = load_image(image_path)
-    image_parts = split_image(image, num_parts)
-    filtered_parts = process_image_parts(image_parts, sigma)
-    combined_image = combine_image_parts(filtered_parts)
-    combined_image.show()
-    combined_image.save('imagen_combinada.jpg')
+    imagen = load_image(ruta_imagen)
+    
+    partes_imagen = split_image(imagen, num_procesos)
 
-# Ejemplo de uso
+    partes_filtradas = process_image_parts(partes_imagen, sigma)
+
+    imagen_combinada = combine_image_parts(partes_filtradas)
+    
+    imagen_combinada.save(ruta_salida)
+
 if __name__ == "__main__":
-    image_path = "/home/luciano/Descargas/um_logo.png"  # Ruta de la imagen en el disco
-    num_parts = 2  # Número de partes en las que se dividirá la imagen
-    sigma = 2.0  # Parámetro del filtro gaussiano
-    main(image_path, num_parts, sigma)
+    ruta_imagen = "/home/luciano/Descargas/um_logo.png"
+    num_procesos = 2
+    sigma = 2.0
+    ruta_salida = 'imagen_filtrada.jpg'
+    procesar_imagen_con_comunicacion(ruta_imagen, ruta_salida, num_procesos, sigma)

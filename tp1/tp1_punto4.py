@@ -1,11 +1,10 @@
 import signal
 import time
+import multiprocessing
 from PIL import Image
 import numpy as np
 from scipy.ndimage import gaussian_filter
-import multiprocessing
 
-# Variable global para gestionar la interrupción
 interrupted = False
 
 def signal_handler(sig, frame):
@@ -117,44 +116,46 @@ def combine_image_parts(filtered_parts):
     
     return combined_image
 
-def measure_performance(image_path, num_parts, sigma=2.0):
+def main(image_path, num_parts, sigma=2.0):
     """
-    Mide el rendimiento de procesamiento secuencial y paralelo.
+    Función principal para medir el rendimiento del procesamiento secuencial y paralelo.
     """
     global interrupted
-    
+
     # Cargar la imagen
     image = load_image(image_path)
     image_parts = split_image(image, num_parts)
-    
+
     # Procesamiento Secuencial
-    interrupted = False  # Resetear la variable global
+    interrupted = False 
     start_time = time.time()
     filtered_parts_sequential = process_image_parts_sequential(image_parts, sigma)
     combined_image_sequential = combine_image_parts(filtered_parts_sequential)
     end_time = time.time()
     sec_time = end_time - start_time
     print(f"Tiempo de procesamiento secuencial: {sec_time:.2f} segundos")
-    
+
+    # Guardar la imagen secuencial para comparación
+    combined_image_sequential.save('imagen_secuencial.jpg')
+
     # Procesamiento Paralelo
-    interrupted = False  # Resetear la variable global
+    interrupted = False  
     start_time = time.time()
     filtered_parts_parallel = process_image_parts_parallel(image_parts, sigma)
     combined_image_parallel = combine_image_parts(filtered_parts_parallel)
     end_time = time.time()
     par_time = end_time - start_time
     print(f"Tiempo de procesamiento paralelo: {par_time:.2f} segundos")
-    
-    # Guardar las imágenes resultantes para comparación visual
-    combined_image_sequential.save('imagen_secuencial.jpg')
+
+    # Guardar la imagen paralela para comparación
     combined_image_parallel.save('imagen_paralela.jpg')
 
 # Configurar el manejador de señales
 signal.signal(signal.SIGINT, signal_handler)
 
-# Ejemplo de uso
+
 if __name__ == "__main__":
-    image_path = "/home/luciano/Descargas/um_logo.png"  # Ruta de la imagen en el disco
+    image_path = "/home/luciano/Descargas/um_logo.png" 
     num_parts = 2  # Número de partes en las que se dividirá la imagen
     sigma = 2.0  # Parámetro del filtro gaussiano
-    measure_performance(image_path, num_parts, sigma)
+    main(image_path, num_parts, sigma)
