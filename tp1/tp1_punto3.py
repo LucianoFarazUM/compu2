@@ -9,15 +9,11 @@ from scipy.ndimage import gaussian_filter
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 def load_image(image_path):
-    """
-    Carga una imagen desde el disco utilizando PIL (Pillow).
-    """
+    
     return Image.open(image_path)
 
 def split_image(image, num_parts):
-    """
-    Divide una imagen en partes iguales.
-    """
+    
     width, height = image.size
     part_height = height // num_parts
     parts = []
@@ -86,12 +82,7 @@ def combine_image_parts(filtered_parts):
     return combined_image
 
 def procesar_imagen_con_comunicacion(ruta_imagen, ruta_salida='imagen_filtrada.jpg', num_procesos=4, sigma=2.0):
-    """
-    :param ruta_imagen: Ruta de la imagen a procesar.
-    :param ruta_salida: Ruta donde se guardará la imagen filtrada.
-    :param num_procesos: Número de procesos a usar para el filtrado.
-    :param sigma: Desviación estándar para el filtro gaussiano.
-    """
+  
     imagen = load_image(ruta_imagen)
     
     partes_imagen = split_image(imagen, num_procesos)

@@ -16,15 +16,11 @@ def signal_handler(sig, frame):
     interrupted = True
 
 def load_image(image_path):
-    """
-    Carga una imagen desde el disco utilizando PIL (Pillow).
-    """
+   
     return Image.open(image_path)
 
 def split_image(image, num_parts):
-    """
-    Divide una imagen en partes iguales.
-    """
+    
     width, height = image.size
     part_height = height // num_parts
     parts = []

@@ -6,15 +6,11 @@ from multiprocessing import Array
 import ctypes
 
 def load_image(image_path):
-    """
-    Carga una imagen desde el disco utilizando PIL (Pillow).
-    """
+   
     return Image.open(image_path).convert('RGB')  
 
 def split_image(image, num_parts):
-    """
-    Divide una imagen en partes iguales.
-    """
+    
     width, height = image.size
     part_height = height // num_parts
     parts = []
@@ -54,7 +50,7 @@ def process_image_parts_with_shared_memory(image_parts, num_parts, sigma=2.0):
     # Convertir las partes de la imagen a un array numpy y copiar al array compartido
     np_array_shared = np.frombuffer(shared_array.get_obj(), dtype=np.uint8).reshape((height, width, 3))
     for i, part in enumerate(image_parts):
-        part_np = np.array(part.convert('RGB'))  # Convertir a RGB
+        part_np = np.array(part.convert('RGB'))  
         start_row = i * (height // num_parts)
         end_row = (i + 1) * (height // num_parts) if i != num_parts - 1 else height
         np_array_shared[start_row:end_row, :, :] = part_np[:end_row - start_row, :, :]  # Asegúrate de que las dimensiones coincidan
@@ -77,9 +73,7 @@ def process_image_parts_with_shared_memory(image_parts, num_parts, sigma=2.0):
     return combined_image
 
 def main(image_path, num_parts, sigma=2.0):
-    """
-    Función principal para cargar, dividir, procesar y mostrar la imagen.
-    """
+    
     image = load_image(image_path)
     image_parts = split_image(image, num_parts)
     combined_image = process_image_parts_with_shared_memory(image_parts, num_parts, sigma)

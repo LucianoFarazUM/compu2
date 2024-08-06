@@ -1,13 +1,6 @@
 from PIL import Image
 
 def cargar_y_dividir_imagen(ruta_imagen, n_partes):
-    """
-    Cargar una imagen y dividirla en partes horizontales iguales.
-
-    :param ruta_imagen: La ruta de la imagen a cargar.
-    :param n_partes: El número de partes en que se dividirá la imagen.
-    :return: Una lista de partes de la imagen.
-    """
     imagen = Image.open(ruta_imagen)
     ancho, alto = imagen.size
     altura_parte = alto // n_partes
@@ -22,12 +15,7 @@ def cargar_y_dividir_imagen(ruta_imagen, n_partes):
     return partes
 
 def guardar_partes(partes, ruta_salida_base):
-    """
-    Guardar las partes de una imagen en archivos.
-
-    :param partes: Una lista de partes de la imagen.
-    :param ruta_salida_base: Ruta base para guardar las partes de la imagen.
-    """
+  
     for i, parte in enumerate(partes):
         ruta_salida = f'{ruta_salida_base}_parte_{i + 1}.png'
         parte.save(ruta_salida)
