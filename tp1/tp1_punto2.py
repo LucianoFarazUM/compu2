@@ -71,7 +71,7 @@ def procesar_imagen_en_paralelo(imagen, num_procesos=4, sigma=1):
     return imagen_filtrada
 
 if __name__ == "__main__":
-    ruta_imagen = "/home/luciano/Descargas/um_logo.png"
+    ruta_imagen = "/home/luciano/Escritorio/compu2/TPS/tp1/um_logo.png"
     num_procesos = 4
     sigma = 1
     ruta_salida = 'imagen_filtrada.jpg'

@@ -155,7 +155,7 @@ signal.signal(signal.SIGINT, signal_handler)
 
 
 if __name__ == "__main__":
-    image_path = "/home/luciano/Descargas/um_logo.png" 
+    image_path = "/home/luciano/Escritorio/compu2/TPS/tp1/um_logo.png"
     num_parts = 2  # Número de partes en las que se dividirá la imagen
     sigma = 2.0  # Parámetro del filtro gaussiano
     main(image_path, num_parts, sigma)

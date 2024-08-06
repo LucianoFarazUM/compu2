@@ -35,7 +35,7 @@ def guardar_partes(partes, ruta_salida_base):
 
 if __name__ == "__main__":
     try:
-        ruta_imagen = "/home/luciano/Descargas/um_logo.png"
+        ruta_imagen = "/home/luciano/Escritorio/compu2/TPS/tp1/um_logo.png"
         
         n_partes = int(input('Ingrese el número de partes que quiera: '))
         partes = cargar_y_dividir_imagen(ruta_imagen, n_partes)

@@ -103,7 +103,7 @@ def procesar_imagen_con_comunicacion(ruta_imagen, ruta_salida='imagen_filtrada.j
     imagen_combinada.save(ruta_salida)
 
 if __name__ == "__main__":
-    ruta_imagen = "/home/luciano/Descargas/um_logo.png"
+    ruta_imagen = "/home/luciano/Escritorio/compu2/TPS/tp1/um_logo.png"
     num_procesos = 2
     sigma = 2.0
     ruta_salida = 'imagen_filtrada.jpg'

@@ -88,7 +88,7 @@ def main(image_path, num_parts, sigma=2.0):
 
 
 if __name__ == "__main__":
-    image_path = "/home/luciano/Descargas/um_logo.png"  # Ruta de la imagen en el disco
-    num_parts = 2  # Número de partes en las que se dividirá la imagen
-    sigma = 2.0  # Parámetro del filtro gaussiano
+    image_path = "/home/luciano/Escritorio/compu2/TPS/tp1/um_logo.png" 
+    num_parts = 2  
+    sigma = 2.0  
     main(image_path, num_parts, sigma)
